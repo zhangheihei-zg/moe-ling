@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>墨灵 - AI 小说创作助手</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 40px; background: #f9f9f9; }
+    .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    h1 { color: #1890ff; }
+    .status { color: #52c41a; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>墨灵 · V1 开发中</h1>
+    <p>? 前端占位页面加载成功！</p>
+    <p>后端状态：<span id="backend-status" class="status">检测中...</span></p>
+  </div>
+
+  <script>
+    // 简单检测后端是否运行
+    fetch('/api/health')
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'healthy') {
+          document.getElementById('backend-status').textContent = '?? 在线';
+        } else {
+          document.getElementById('backend-status').textContent = '?? 异常';
+        }
+      })
+      .catch(() => {
+        document.getElementById('backend-status').textContent = '?? 未连接';
+      });
+  </script>
+</body>
+</html>
