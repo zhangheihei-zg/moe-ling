@@ -30,4 +30,4 @@ class KnowledgeChunk(Base):
     chunk_text = Column(Text, nullable=False, comment="文本片段")
     novel_id = Column(Integer, nullable=False, comment="关联的小说ID")
     embedding = Column(Text, nullable=True, comment="文本片段的向量")
-    created_at = Column(DateTime(timezone=True), server_default=func.now())code backend/requirements.txt
+    created_at = Column(DateTime(timezone=True), server_default=func.now())

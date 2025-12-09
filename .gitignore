@@ -26,3 +26,8 @@ Thumbs.db
 .dockerignore
 docker-compose.override.yml
 deploy/.env
+# Local env
+.env
+
+# Docker
+.dockerignore

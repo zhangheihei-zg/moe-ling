@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.backend
+    container_name: moe-ling-backend
+    restart: unless-stopped
+    environment:
+      - DATABASE_URL=postgresql://moe_user:${DB_PASSWORD}@db:5432/moe_ling
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - app-network
+
+  frontend:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.frontend
+    container_name: moe-ling-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  db:
+    image: postgres:16-alpine
+    container_name: moe-ling-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: moe_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: moe_ling
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U moe_user -d moe_ling"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:
+    driver: bridge

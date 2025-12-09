@@ -1,0 +1,28 @@
+# Stage 1: 构建依赖
+FROM python:3.11-slim AS builder
+
+WORKDIR /app
+COPY ./backend/requirements.txt .
+RUN pip install --user -r requirements.txt
+
+# Stage 2: 运行时镜像
+FROM python:3.11-slim
+
+WORKDIR /app
+
+# 安装仅运行所需依赖
+COPY --from=builder /root/.local /root/.local
+
+# 只复制 backend 目录（不含 alembic）
+COPY ./backend ./backend
+
+# 设置 PATH
+ENV PATH=/root/.local/bin:$PATH
+
+# 创建非 root 用户
+RUN useradd --create-home --shell /bin/bash appuser
+USER appuser
+
+EXPOSE 8000
+
+CMD ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
