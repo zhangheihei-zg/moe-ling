@@ -1,0 +1,19 @@
+# docker/docker-compose.yml
+version: '3.8'
+
+services:
+  db:
+    image: ankane/pgvector:latest
+    container_name: moe-ling-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: moe_ling
+      POSTGRES_USER: moe_user
+      POSTGRES_PASSWORD: moe_secure_password_123
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    restart: unless-stopped
+
+volumes:
+  pgdata:
